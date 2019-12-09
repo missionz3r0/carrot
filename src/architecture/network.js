@@ -1596,13 +1596,16 @@ function Network(input_size, output_size) {
  *
  * let exported = myNetwork.toJSON();
  * let imported = Network.fromJSON(exported) // imported will be a new instance of Network that is an exact clone of myNetwork
+ *
+ * @todo Add network flag for blank networks
  */
 Network.fromJSON = function(json) {
   // TODO: Match new network input/output nodes with json.input nodes and json.output nodes
 
-  const network = new Network(json.input_size, json.output_size);
+  const network = new Network(json.input, json.output); // Use JSON input / output for backwards compatibility
 
   network.dropout = json.dropout;
+  // todo: Add network flag for blank networks
   network.nodes = [];
   network.connections = [];
   network.input_nodes = new Set();
