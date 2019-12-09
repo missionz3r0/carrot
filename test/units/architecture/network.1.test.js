@@ -790,6 +790,14 @@ describe('Network', function(){
     })
   })
 
+  describe.skip('network.toJSON()', function () {
+    it('network.custom = x, toJSON() => { ... , custom: x } | copies custom parameters', function() {})
+  })
+
+  describe.skip('network.fromJSON()', function () {
+
+  })
+
   describe('network.evolve()', function () {
     // similar to network.train, with the difference that this dataset requires
     // evolving the network to be solvable

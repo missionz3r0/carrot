@@ -211,7 +211,7 @@ function Network(input_size, output_size) {
    * Backpropagate the network
    *
    * This function allows you to teach the network. If you want to do more complex training, use the `network.train()` function.
-   * 
+   *
    * @function propagate
    * @memberof Network
    *
@@ -1104,10 +1104,11 @@ function Network(input_size, output_size) {
    *
    * let exported = myNetwork.toJSON();
    * let imported = Network.fromJSON(exported) // imported will be a new instance of Network that is an exact clone of myNetwork
+   *
+   * @todo Improve node.toJSON
+   * @todo Improve connection.toJSON
    */
   self.toJSON = function() {
-    // 0, 1, 2, 3, 16, 17, 18, 19, 20, 24, 28, 32. all of these leave from node 0, but
-    // node 0 only has 4 outgoing connections..
 
     const json = {
       nodes: [],
@@ -1124,20 +1125,15 @@ function Network(input_size, output_size) {
 
     let i;
     for (i = 0; i < self.nodes.length; i++) {
-      // So we don't have to use expensive .indexOf()
-      self.nodes[i].index = i;
-      if (self.input_nodes.has(self.nodes[i])) {
-        json.input_nodes.push(i);
-      }
-      if (self.output_nodes.has(self.nodes[i])) {
-        json.output_nodes.push(i);
-      }
-    }
+      const node = self.nodes[i]; // copy by reference
 
-    for (i = 0; i < self.nodes.length; i++) {
-      const node = self.nodes[i];
-      const node_json = node.toJSON();
-      node_json.index = i;
+      // So we don't have to use expensive .indexOf()
+      node.index = i;
+      if (self.input_nodes.has(node)) { json.input_nodes.push(i); }
+      if (self.output_nodes.has(node)) { json.output_nodes.push(i); }
+
+      const node_json = node.toJSON(); // Todo: improve node.toJSON
+      node_json.index = i; // Shouldn't have to repeat this, toJSON should take care of copying custom parameters
       json.nodes.push(node_json);
 
       if (node.connections_self.weight !== 0) {
@@ -1152,7 +1148,7 @@ function Network(input_size, output_size) {
 
     for (i = 0; i < self.connections.length; i++) {
       const connection = self.connections[i];
-      const connection_json = connection.toJSON();
+      const connection_json = connection.toJSON(); // Todo: improve connection.toJSON
       connection_json.from = connection.from.index;
       connection_json.to = connection.to.index;
 
